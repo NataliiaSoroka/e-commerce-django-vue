@@ -1,0 +1,32 @@
+version: '3'
+volumes:
+  ecommerce_proj_db:
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+    env_file:
+      - .env
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+  db:
+    image: postgres:15.6
+    restart: always
+    user: postgres
+    ports:
+      - 5436:5432
+    volumes:
+      - ecommerce_proj_db:/var/lib/postgresql/data
+    env_file:
+      - .env
